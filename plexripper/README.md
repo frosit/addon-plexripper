@@ -2,6 +2,15 @@
 
 This addon installs the PlexRipper project within home assistant.
 
+__This is a work in progress__
+
+__To Do:__
+
+* optimize container build
+* verify right build from
+* Fix ingress
+* extend configs
+
 ![Supports aarch64 Architecture][aarch64-shield]
 ![Supports amd64 Architecture][amd64-shield]
 ![Supports armhf Architecture][armhf-shield]
