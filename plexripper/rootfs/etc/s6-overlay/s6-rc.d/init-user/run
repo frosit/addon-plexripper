@@ -4,26 +4,27 @@
 # Home Assistant Community Add-on: PlexRipper
 # Persists user settings and installs custom user packages.
 # ==============================================================================
+# @todo cleanup
+# @todo handle env vars better
+#
+#
 declare DIRECTORIES
 
 declare PLEXRIPPER_ROOT_PATH
 declare GIT_PATH
 declare CLONE_URL
 
-declare message
-
 readonly -a DIRECTORIES=(Movies Config Downloads TvShows)
-PLEXRIPPER_ROOT_PATH=/data/PlexRipper
+
+# @todo make configurable
 GIT_PATH=/data/git
 CLONE_URL="https://github.com/plexripper/plexripper"
-
 
 PLEXRIPPER_ROOT_PATH=$(bashio::config 'plexripper_root')
 PLEXRIPPER_PUBLISH_PATH=$(bashio::config 'plexripper_publish')
 
 bashio::log.info "Plexripper root: ${PLEXRIPPER_ROOT_PATH}"
 bashio::log.info "Plexripper publish: ${PLEXRIPPER_PUBLISH_PATH}"
-
 
 ### Set variables
 export VERSION=0.0.0
@@ -38,10 +39,8 @@ export API_PORT=7000
 export NUXT_PUBLIC_IS_DOCKER=true
 
 
-
-
-
 # Create and link plex directories
+# @todo duplicate logic..., change after we can congiure paths in plexripper
 if ! bashio::fs.directory_exists "${PLEXRIPPER_ROOT_PATH}"; then
   bashio::log.info "Creating directories"
   for dir in "${DIRECTORIES[@]}"; do
@@ -67,6 +66,7 @@ if ! bashio::fs.directory_exists "${GIT_PATH}"; then
 fi
 
 # If no publish directory exists, create it
+# @todo add config var to not trigger this
 if ! bashio::fs.directory_exists "${PLEXRIPPER_PUBLISH_PATH}"; then
   bashio::log.info "No publish folder at ${PLEXRIPPER_PUBLISH_PATH}, starting build"
 

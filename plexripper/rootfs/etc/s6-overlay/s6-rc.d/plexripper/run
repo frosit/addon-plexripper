@@ -1,14 +1,14 @@
 #!/command/with-contenv bashio
 # shellcheck shell=bash
 # ==============================================================================
-# Home Assistant Community Add-on: Uptime Kuma
-# Starts Uptime Kuma
+# Home Assistant Community Add-on: PlexRipper
+# Starts plexripper.... or not..
 # ==============================================================================
-
 PLEXRIPPER_ROOT_PATH=$(bashio::config 'plexripper_root')
 PLEXRIPPER_PUBLISH_PATH=$(bashio::config 'plexripper_publish')
 
 bashio::log.info "PlexRipper using root: ${PLEXRIPPER_ROOT_PATH}"
+bashio::log.info "PlexRipper using publish: ${PLEXRIPPER_PUBLISH_PATH}"
 
 ### Set variables
 export VERSION=0.0.0
@@ -22,22 +22,24 @@ export NUXT_PORT=7000
 export API_PORT=7000
 export NUXT_PUBLIC_IS_DOCKER=true
 
-
+# @todo exit app
 if ! bashio::fs.directory_exists "${PLEXRIPPER_ROOT_PATH}"; then
     bashio::log.error "no PlexRipper root"
 fi
 
+# @todo exit app
 if ! bashio::fs.directory_exists "${PLEXRIPPER_PUBLISH_PATH}"; then
   bashio::log.error "no PlexRipper publish"
 fi
 
+# @todo use exit clause
 #cd ${PLEXRIPPER_PUBLISH_PATH} || bashio::exit.nok "Could not change directory to publish"
-cd ${PLEXRIPPER_PUBLISH_PATH} || bashio::log.error "Could not change directory to publish"
+cd ${PLEXRIPPER_PUBLISH_PATH} || bashio::log.error "Could not change directory into publish"
 
 if [ -f ${PLEXRIPPER_PUBLISH_PATH}/PlexRipper.WebAPI ]; then
-    bashio::log.error "start PlexRipper"
+    bashio::log.info "Starting PlexRipper"
     exec ${PLEXRIPPER_PUBLISH_PATH}/PlexRipper.WebAPI
 else
-   bashio::log.error "start tailing"
+   bashio::log.error "Could not find PlexRipper prebuild, tailing nothing so you can debug"
   exec tail -f /dev/null
 fi

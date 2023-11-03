@@ -1,8 +1,9 @@
 #!/command/with-contenv bashio
 # shellcheck shell=bash
 # ==============================================================================
-# Home Assistant Community Add-on: Uptime Kuma
-# Take down the S6 supervision tree when Uptime Kuma fails
+# Home Assistant Community Add-on: PlexRipper
+# Take down the S6 supervision tree when PlexRipper fails
+# @todo I stole this from the Uptime kuma addon but i dont know what it does....
 # ==============================================================================
 declare exit_code
 readonly exit_code_container=$(</run/s6-linux-init-container-results/exitcode)

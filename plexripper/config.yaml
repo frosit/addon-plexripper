@@ -1,5 +1,5 @@
 name: PlexRipper add-on
-version: "0.1.20"
+version: "0.1.22"
 slug: plexripper
 description: PlexRipper add-on
 url: "https://github.com/frosit/addon-plexripper"
@@ -13,11 +13,9 @@ ingress: false
 panel_icon: mdi:cloud-download
 startup: services
 arch:
-  - armhf
   - armv7
   - aarch64
   - amd64
-  - i386
 init: false
 hassio_api: false
 homeassistant_api: false
