@@ -1,8 +1,10 @@
 # Home Assistant Add-on: PlexRipper
 
-This addon installs the PlexRipper project within home assistant.
+This addon installs the  [PlexRipper project](https://github.com/plexripper/plexripper) as an addon within Home Assistant.
 
-__This is a work in progress__
+> This addon is a work in progress
+
+
 
 __To Do:__
 

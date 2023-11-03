@@ -1,5 +1,5 @@
 name: PlexRipper add-on
-version: "0.1.17"
+version: "0.1.20"
 slug: plexripper
 description: PlexRipper add-on
 url: "https://github.com/frosit/addon-plexripper"
@@ -13,8 +13,11 @@ ingress: false
 panel_icon: mdi:cloud-download
 startup: services
 arch:
+  - armhf
+  - armv7
   - aarch64
   - amd64
+  - i386
 init: false
 hassio_api: false
 homeassistant_api: false
@@ -22,7 +25,6 @@ hassio_role: homeassistant
 map:
   - share:rw
   - media:rw
-  - addons:rw
   - addon_config:rw
 options:
   message: "Hello world..."
@@ -32,4 +34,4 @@ schema:
   message: "str?"
   plexripper_root: "str?"
   plexripper_publish: "str?"
-image: "ghcr.io/frosit/{arch}-addon-plexripper"
+#image: "ghcr.io/frosit/{arch}-addon-plexripper"
