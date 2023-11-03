@@ -32,4 +32,4 @@ schema:
   message: "str?"
   plexripper_root: "str?"
   plexripper_publish: "str?"
-#image: "ghcr.io/frosit/{arch}-addon-plexripper"
+image: "ghcr.io/frosit/{arch}-addon-plexripper"
