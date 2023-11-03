@@ -9,7 +9,6 @@ ports:
   7000/tcp: 7000
 #ingress_port: 7000
 #ingress_stream: false
-ingress: false
 panel_icon: mdi:cloud-download
 startup: services
 arch:
@@ -19,19 +18,14 @@ arch:
   - armhf
   - i386
 init: false
-hassio_api: false
-homeassistant_api: false
 hassio_role: homeassistant
 map:
   - share:rw
   - media:rw
-  - addon_config:rw
 options:
-  message: "Hello world..."
   plexripper_root: "/data/PlexRipper"
   plexripper_publish: "/data/publish"
 schema:
-  message: "str?"
   plexripper_root: "str?"
   plexripper_publish: "str?"
 image: "ghcr.io/frosit/{arch}-addon-plexripper"
