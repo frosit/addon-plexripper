@@ -16,6 +16,8 @@ arch:
   - armv7
   - aarch64
   - amd64
+  - armhf
+  - i386
 init: false
 hassio_api: false
 homeassistant_api: false

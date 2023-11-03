@@ -37,11 +37,11 @@ RUN git clone https://github.com/plexripper/plexripper /tmp/plexripper \
     && cp -R /tmp/plexripper/src/WebAPI/ClientApp /opt/plexripper/ClientApp \
     && ln -s /opt/plexripper/ClientApp/.output/public /opt/plexripper/wwwroot
 
-ARG BUILD_ARCH
-RUN pip3 install --no-cache-dir \
-        homeassistant-cli==0.9.1 \
-    && curl -L -s -o /usr/bin/ha "https://github.com/home-assistant/cli/releases/download/4.29.0/ha_${BUILD_ARCH}" \
-    && chmod a+x /usr/bin/ha
+#ARG BUILD_ARCH=amd64
+#RUN pip3 install --no-cache-dir \
+#        homeassistant-cli==0.9.1 \
+#    && curl -L -s -o /usr/bin/ha "https://github.com/home-assistant/cli/releases/download/4.29.0/ha_${BUILD_ARCH}" \
+#    && chmod a+x /usr/bin/ha
 
 # Cleanup
 RUN apk del --no-cache --purge .build-dependencies \
