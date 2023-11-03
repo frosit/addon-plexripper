@@ -1,0 +1,52 @@
+#!/bin/bash
+#######################
+# PlexRipper
+# =====================
+#
+
+### Set variables
+export VERSION=0.0.0
+export DOTNET_ENVIRONMENT=Production
+export ASPNETCORE_URLS=http://+:7000
+export DOTNET_URLS=http://+:7000
+
+# Frontend
+export NUXT_HOST=0.0.0.0
+export NUXT_PORT=7000
+export API_PORT=7000
+export NUXT_PUBLIC_IS_DOCKER=true
+
+############# Clone project ##############
+git clone https://github.com/plexripper/plexripper /data/git
+
+# Create directories
+mkdir /data/PlexRipper
+mkdir /data/PlexRipper/Movies
+mkdir /data/PlexRipper/Config
+mkdir /data/PlexRipper/TvShows
+mkdir /data/PlexRipper/Downloads
+
+# Link into persistant place
+ln -s /data/PlexRipper/Movies /Movies
+ln -s /data/PlexRipper/Config /Config
+ln -s /data/PlexRipper/TvShows /TvShows
+ln -s /data/PlexRipper/Downloads /Downloads
+
+############ Build dotnet
+
+cd /data/git/src/WebAPI
+dotnet publish "WebAPI.csproj" -c Release -o /data/publish /p:AssemblyVersion=$VERSION
+
+######### Build frontend
+
+# Move WebApp to publish folder
+rm -Rf /data/publish/ClientApp
+cp -R /data/git/src/WebAPI/ClientApp /data/publish/ClientApp
+
+# Build frontend
+cd /data/publish/ClientApp
+npm install
+npm run generate --fail-on-error
+
+# link wwwroot
+ln -s /data/publish/ClientApp/.output/public /data/publish/wwwroot

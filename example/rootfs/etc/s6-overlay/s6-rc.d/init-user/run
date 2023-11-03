@@ -1,0 +1,53 @@
+#!/command/with-contenv bashio
+# shellcheck shell=bash
+# ==============================================================================
+# Home Assistant Community Add-on: PlexRipper
+# Persists user settings and installs custom user packages.
+# ==============================================================================
+declare DIRECTORIES
+
+declare PLEXRIPPER_ROOT_PATH
+declare GIT_PATH
+declare CLONE_URL
+
+declare message
+
+readonly -a DIRECTORIES=(Movies Config Downloads TvShows)
+PLEXRIPPER_ROOT_PATH=/data/PlexRipper
+GIT_PATH=/data/git
+CLONE_URL="https://github.com/plexripper/plexripper"
+
+
+PLEXRIPPER_ROOT_PATH=$(bashio::config 'plexripper_root')
+PLEXRIPPER_PUBLISH_PATH=$(bashio::config 'plexripper_publish')
+
+## Get the 'message' key from the user config options.
+message=$(bashio::config 'message')
+
+## Print the message the user supplied, defaults to "Hello World..."
+bashio::log.info "${message:="Hello World..."}"
+
+# Create and link plex directories
+if ! bashio::fs.directory_exists "${PLEXRIPPER_ROOT_PATH}"; then
+  for dir in "${DIRECTORIES[@]}"; do
+    mkdir -p "${PLEXRIPPER_ROOT_PATH}/${dir}"
+    ln -s "${PLEXRIPPER_ROOT_PATH}/${dir}" "/${dir}" \
+          || bashio::log.warning "Failed linking common directory: ${dir}"
+  done
+fi
+
+# Clone git repo
+if ! bashio::fs.directory_exists "${GIT_PATH}"; then
+  bashio::log.info "No git folder at ${GIT_PATH}"
+  git clone ${CLONE_URL} ${GIT_PATH} \
+          || bashio::exit.nok 'Failed to clone git repo'
+fi
+
+# If no publish directory exists, create it
+if ! bashio::fs.directory_exists "${PLEXRIPPER_PUBLISH_PATH}"; then
+  bashio::log.info "No publish folder at ${PLEXRIPPER_PUBLISH_PATH}, should build"
+fi
+
+
+
+

@@ -1,0 +1,40 @@
+#!/command/with-contenv bashio
+# shellcheck shell=bash
+# ==============================================================================
+# Home Assistant Community Add-on: Uptime Kuma
+# Starts Uptime Kuma
+# ==============================================================================
+
+PLEXRIPPER_ROOT_PATH=$(bashio::config 'plexripper_root')
+PLEXRIPPER_PUBLISH_PATH=$(bashio::config 'plexripper_publish')
+
+bashio::log.info "PlexRipper using root: ${PLEXRIPPER_ROOT_PATH}"
+
+### Set variables
+export VERSION=0.0.0
+export DOTNET_ENVIRONMENT=Production
+export ASPNETCORE_URLS=http://+:7000
+export DOTNET_URLS=http://+:7000
+
+# Frontend
+export NUXT_HOST=0.0.0.0
+export NUXT_PORT=7000
+export API_PORT=7000
+export NUXT_PUBLIC_IS_DOCKER=true
+
+bashio::log.info "Starting PlexRipper"
+
+exec
+#tail -f /dev/null
+#exec node server/server.js --data-dir="/data/"
+if ! bashio::fs.directory_exists "${PLEXRIPPER_ROOT_PATH}"; then
+    bashio::log.error "no PlexRipper root"
+fi
+
+if ! bashio::fs.directory_exists "${PLEXRIPPER_PUBLISH_PATH}"; then
+  bashio::log.error "no PlexRipper publish"
+fi
+
+cd ${PLEXRIPPER_PUBLISH_PATH} || bashio::exit.nok "Could not change directory to publish"
+
+exec ./PlexRipper.WebAPI

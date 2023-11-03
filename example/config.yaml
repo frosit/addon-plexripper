@@ -1,20 +1,35 @@
 # https://developers.home-assistant.io/docs/add-ons/configuration#add-on-config
-name: Example add-on
-version: "1.2.0"
-slug: example
-description: Example add-on
-url: "https://github.com/home-assistant/addons-example/tree/main/example"
+name: PlexRipper add-on
+version: "0.1.4"
+slug: plexripper
+description: PlexRipper add-on
+url: "https://github.com/frosit/addon-plexripper"
+webui: http://[HOST]:[PORT:7000]
+host_network: true
+ports:
+  7000/tcp: 7000
+ingress_port: 7000
+ingress_stream: false
+ingress: true
+panel_icon: mdi:cloud-download
+startup: services
 arch:
-  - armhf
-  - armv7
   - aarch64
   - amd64
-  - i386
-init: false
+init: true
+hassio_api: true
+homeassistant_api: true
 map:
   - share:rw
+  - media:rw
+  - addons:rw
+  - addon_config:rw
 options:
   message: "Hello world..."
+  plexripper_root: "/data/PlexRipper"
+  plexripper_publish: "/data/publish"
 schema:
   message: "str?"
-image: "ghcr.io/home-assistant/{arch}-addon-example"
+  plexripper_root: "str?"
+  plexripper_publish: "str?"
+#image: "ghcr.io/home-assistant/{arch}-addon-example"
