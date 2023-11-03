@@ -29,7 +29,7 @@ ENV NUXT_PUBLIC_IS_DOCKER=true
 
 RUN git clone https://github.com/plexripper/plexripper /tmp/plexripper \
     && cd /tmp/plexripper/src/WebAPI \
-    && dotnet publish "WebAPI.csproj" -c Release -o /opt/plexripper /p:AssemblyVersion=$VERSION \
+    && dotnet publish "WebAPI.csproj" -c Release -o /opt/plexripper /p:AssemblyVersion=${VERSION} --no-restore \
     && cd /tmp/plexripper/src/WebAPI/ClientApp \
     && npm install \
     && npm run generate --fail-on-error \

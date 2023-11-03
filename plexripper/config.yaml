@@ -15,7 +15,6 @@ arch:
   - armv7
   - aarch64
   - amd64
-  - armhf
 init: false
 hassio_role: homeassistant
 map:
