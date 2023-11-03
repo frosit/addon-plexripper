@@ -22,11 +22,7 @@ export NUXT_PORT=7000
 export API_PORT=7000
 export NUXT_PUBLIC_IS_DOCKER=true
 
-bashio::log.info "Starting PlexRipper"
 
-exec
-#tail -f /dev/null
-#exec node server/server.js --data-dir="/data/"
 if ! bashio::fs.directory_exists "${PLEXRIPPER_ROOT_PATH}"; then
     bashio::log.error "no PlexRipper root"
 fi
@@ -38,5 +34,10 @@ fi
 #cd ${PLEXRIPPER_PUBLISH_PATH} || bashio::exit.nok "Could not change directory to publish"
 cd ${PLEXRIPPER_PUBLISH_PATH} || bashio::log.error "Could not change directory to publish"
 
-#exec tail -f /dev/null
-exec ./PlexRipper.WebAPI
+if [ -f ${PLEXRIPPER_PUBLISH_PATH}/PlexRipper.WebAPI ]; then
+    bashio::log.error "start PlexRipper"
+    exec ${PLEXRIPPER_PUBLISH_PATH}/PlexRipper.WebAPI
+else
+   bashio::log.error "start tailing"
+  exec tail -f /dev/null
+fi

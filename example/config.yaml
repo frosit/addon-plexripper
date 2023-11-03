@@ -1,6 +1,6 @@
 # https://developers.home-assistant.io/docs/add-ons/configuration#add-on-config
 name: PlexRipper add-on
-version: "0.1.12"
+version: "0.1.14"
 slug: plexripper
 description: PlexRipper add-on
 url: "https://github.com/frosit/addon-plexripper"
