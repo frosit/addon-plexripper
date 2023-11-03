@@ -1,0 +1,87 @@
+#!/command/with-contenv bashio
+# shellcheck shell=bash
+# ==============================================================================
+# Home Assistant Community Add-on: PlexRipper
+# Persists user settings and installs custom user packages.
+# ==============================================================================
+# @todo cleanup
+# @todo handle env vars better
+#
+#
+declare DIRECTORIES
+
+declare PLEXRIPPER_ROOT_PATH
+declare GIT_PATH
+declare CLONE_URL
+
+readonly -a DIRECTORIES=(Movies Config Downloads TvShows)
+
+# @todo make configurable
+GIT_PATH=/data/git
+CLONE_URL="https://github.com/plexripper/plexripper"
+
+PLEXRIPPER_ROOT_PATH=$(bashio::config 'plexripper_root')
+PLEXRIPPER_PUBLISH_PATH=$(bashio::config 'plexripper_publish')
+
+bashio::log.info "Plexripper root: ${PLEXRIPPER_ROOT_PATH}"
+bashio::log.info "Plexripper publish: ${PLEXRIPPER_PUBLISH_PATH}"
+
+### Set variables
+export VERSION=0.0.0
+export DOTNET_ENVIRONMENT=Production
+export ASPNETCORE_URLS=http://+:7000
+export DOTNET_URLS=http://+:7000
+
+# Frontend
+export NUXT_HOST=0.0.0.0
+export NUXT_PORT=7000
+export API_PORT=7000
+export NUXT_PUBLIC_IS_DOCKER=true
+
+
+# Create and link plex directories
+# @todo duplicate logic..., change after we can congiure paths in plexripper
+if ! bashio::fs.directory_exists "${PLEXRIPPER_ROOT_PATH}"; then
+  bashio::log.info "Creating directories"
+  for dir in "${DIRECTORIES[@]}"; do
+    mkdir -p "${PLEXRIPPER_ROOT_PATH}/${dir}"
+    ln -s "${PLEXRIPPER_ROOT_PATH}/${dir}" "/${dir}" \
+          || bashio::log.warning "Failed linking common directory: ${dir}"
+  done
+fi
+
+for dir in "${DIRECTORIES[@]}"; do
+  if ! bashio::fs.directory_exists "${PLEXRIPPER_ROOT_PATH}"; then
+    bashio::log.info "Creating symlink at ${dir}"
+    ln -s "${PLEXRIPPER_ROOT_PATH}/${dir}" "/${dir}" \
+          || bashio::log.warning "Failed linking common directory: ${dir}"
+  fi
+done
+
+# Clone git repo
+if ! bashio::fs.directory_exists "${GIT_PATH}"; then
+  bashio::log.info "No git folder at ${GIT_PATH}, cloning"
+  git clone ${CLONE_URL} ${GIT_PATH} \
+          || bashio::exit.nok 'Failed to clone git repo'
+fi
+
+# If no publish directory exists, create it
+# @todo add config var to not trigger this
+if ! bashio::fs.directory_exists "${PLEXRIPPER_PUBLISH_PATH}"; then
+  bashio::log.info "No publish folder at ${PLEXRIPPER_PUBLISH_PATH}, starting build"
+
+  cd ${GIT_PATH}/src/WebAPI || bashio::exit.nok 'cant go into WebAPI folder'
+
+  dotnet publish "WebAPI.csproj" -c Release -o /data/publish /p:AssemblyVersion=$VERSION || bashio::exit.nok 'build error'
+
+  rm -Rf ${PLEXRIPPER_PUBLISH_PATH}/ClientApp || bashio::exit.nok 'could not remove old client app'
+  cp -R ${GIT_PATH}/src/WebAPI/ClientApp ${PLEXRIPPER_PUBLISH_PATH}/ClientApp || bashio::exit.nok 'could not copy client app'
+  cd ${PLEXRIPPER_PUBLISH_PATH}/ClientApp || bashio::exit.nok 'could not go into client app folder'
+  npm install || bashio::exit.nok 'npm install failed'
+  npm run generate --fail-on-error || bashio::exit.nok 'npm run generate failed'
+
+  ln -s ${PLEXRIPPER_PUBLISH_PATH}/ClientApp/.output/public ${PLEXRIPPER_PUBLISH_PATH}/wwwroot || bashio::exit.nok 'could not link wwwroot'
+fi
+
+
+
