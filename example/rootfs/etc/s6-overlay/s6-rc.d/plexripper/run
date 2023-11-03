@@ -35,6 +35,8 @@ if ! bashio::fs.directory_exists "${PLEXRIPPER_PUBLISH_PATH}"; then
   bashio::log.error "no PlexRipper publish"
 fi
 
-cd ${PLEXRIPPER_PUBLISH_PATH} || bashio::exit.nok "Could not change directory to publish"
+#cd ${PLEXRIPPER_PUBLISH_PATH} || bashio::exit.nok "Could not change directory to publish"
+cd ${PLEXRIPPER_PUBLISH_PATH} || bashio::log.error "Could not change directory to publish"
 
+#exec tail -f /dev/null
 exec ./PlexRipper.WebAPI

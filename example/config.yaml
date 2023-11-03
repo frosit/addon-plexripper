@@ -1,6 +1,6 @@
 # https://developers.home-assistant.io/docs/add-ons/configuration#add-on-config
 name: PlexRipper add-on
-version: "0.1.4"
+version: "0.1.12"
 slug: plexripper
 description: PlexRipper add-on
 url: "https://github.com/frosit/addon-plexripper"
@@ -16,7 +16,7 @@ startup: services
 arch:
   - aarch64
   - amd64
-init: true
+init: false
 hassio_api: true
 homeassistant_api: true
 map:
