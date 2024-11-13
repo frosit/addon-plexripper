@@ -1,0 +1,13 @@
+# https://developers.home-assistant.io/docs/add-ons/configuration#add-on-dockerfile
+# @todo check if these are proper
+build_from:
+  amd64: ghcr.io/hassio-addons/base:14.3.1
+  aarch64: ghcr.io/hassio-addons/base:14.3.1
+  armv7: ghcr.io/hassio-addons/base:14.3.1
+labels:
+  org.opencontainers.image.title: "Home Assistant Add-on: PlexRipper add-on"
+  org.opencontainers.image.description: "PlexRipper add-on"
+  org.opencontainers.image.source: "https://github.com/frosit/addon-plexripper"
+  org.opencontainers.image.licenses: "Apache License 2.0"
+args:
+  TEMPIO_VERSION: "2021.09.0"
