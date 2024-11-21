@@ -9,14 +9,14 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 # hadolint ignore=SC2181, DL3008
 RUN apk add --no-cache --virtual .build-dependencies \
-        build-base=0.5-r3 \
-        py3-pip=23.1.2-r0 \
+        build-base \
+        py3-pip \
     \
     && apk add --no-cache \
-        dotnet7-sdk \
+        dotnet8-sdk \
         git \
-        nodejs=18.18.2-r0 \
-        npm=9.6.6-r0
+        nodejs \
+        npm
 
 ENV DOTNET_ENVIRONMENT=Production
 ENV ASPNETCORE_URLS=http://+:7000
